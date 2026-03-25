@@ -20,9 +20,6 @@ let camera, canvas, controls, scene, renderer;
 import {FontLoader} from "./src/FontLoader.js";
 
 /////
-	//////////sky
-
-	//skyend
 
 
 //////OBJ LOADER
@@ -236,7 +233,20 @@ const material = new THREE.MeshBasicMaterial({
 const rectangle = new THREE.Mesh(geometry, material);
 rectangle.rotation.x = -Math.PI / 2;
 scene.add(rectangle);
-    // Add world geometry
+
+	
+	
+	////
+		//////////sky
+const texture3 = textureLoader.load('bluecircle.jpg');
+const material3 = new THREE.MeshBasicMaterial({ map: texture3, side: THREE.DoubleSide });
+const geometry3 = new THREE.BoxGeometry(10, 10, 10);
+const mesh3 = new THREE.Mesh(geometry3, material3);
+		mesh3.scale.setScalar( 100 );
+		mesh3.position.y = 200;
+			mesh3.position.z = -10;
+scene.add(mesh3);
+	//skyend
 
 	///MARCH 24EXAMPLE MATERIAL AND OBJECT
 	
