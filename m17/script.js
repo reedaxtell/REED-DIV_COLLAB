@@ -16,6 +16,21 @@ import { PointerLockControls } from "./src/PointerLockControls.js";
 // Declaring global variables.
 let camera, canvas, controls, scene, renderer;
 
+/////////class demo
+import {FontLoader} from "./src/FontLoader.js";
+
+/////
+	//////////sky
+	//
+	//
+import { SkyMesh } from 'three/addons/objects/SkyMesh.js';
+	//skyend
+
+
+//////OBJ LOADER
+			import { OBJLoader } from './src/OBJLoader.js';
+const loader1 = new THREE.TextureLoader();
+
 // variables for First person controls
 let raycaster;
 
@@ -32,12 +47,13 @@ const direction = new THREE.Vector3();
 init();
 
 // Define initial scene
-function init() {
+async function init() {
     // scene setup
+	
     canvas = document.getElementById("3-holder");
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x00ffff);
-    scene.fog = new THREE.FogExp2(0xcc66ff, 0.0015);
+ //   scene.background = new THREE.Color(0x00ffff);
+   scene.fog = new THREE.FogExp2(0xcc66ff, 0.0015);
     renderer = new THREE.WebGLRenderer({ antialias: true });
     //renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize(innerWidth, innerHeight);
@@ -45,7 +61,7 @@ function init() {
     canvas.appendChild(renderer.domElement);
 
     // Setup camera
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
     camera.position.set(0, 10, 0);
 
     // Setup orbit controls
@@ -58,6 +74,11 @@ function init() {
     //controls.maxDistance = 500;
     //controls.cursorStyle = "grab";
     //controls.maxPolarAngle = Math.PI / 2;
+	
+	
+
+	
+	
     
     //setup first person controls
     controls = new PointerLockControls( camera, document.body );
@@ -152,21 +173,90 @@ function init() {
 
 				raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 
+//////////////ADD FONT + TEEXT
+	const loader = new FontLoader();
+	loader.load("./Public Sans_Bold.json", function( font ){
+		///////////// CREATE COLOR AND MATERIAL
+		const color = 0x006699;
+
+		const matDark = new THREE.LineBasicMaterial( {
+			color: color,
+			side: THREE.DoubleSide
+					} );
+		//////CREATE MESSAGE/TEXT
+		const message = "Which Way\n<-               ->";
+		/////create shapes
+		const reedshapes = font.generateShapes(message,50);
+		const textGeometry = new THREE.ShapeGeometry(reedshapes);
+		textGeometry.computeBoundingBox();
+		////center alignment
+		
+		//////add objects to scene
+		const text = new THREE.Mesh (textGeometry, matDark);
+		text.position.z = -300;
+		text.position.y = 100;
+				text.position.x = -200;
+		scene.add(text);
+		
+	} );
+	
+	
+	
+	/////////OBJ TEST
+	//
+const objLoader = new OBJLoader().setPath( './' );
+	//objLoader.setMaterials(matDark); // optional since OBJ assets can be loaded without an accompanying MTL file
+
+	const object = await objLoader.loadAsync( 'reedcyberpunkcity.obj' );
+	object.position.x = -400;
+	object.position.y = 0;
+		object.position.z = 0;
+	object.scale.setScalar( 14 );
+	object.rotation.y = Math.PI / 2; 
+	scene.add( object );
+	
+	
+	//
+	//
+	//objLoader.setMaterials(matDark); // optional since OBJ assets can be loaded without an accompanying MTL file
+
+	const object2 = await objLoader.loadAsync( 'solarpunk.obj' );
+
+	object2.position.y = -1;
+		object2.position.z = 0;
+			object2.position.x = 400;
+	object2.scale.setScalar( 17 );
+		object2.rotation.y = Math.PI / -2; 
+	scene.add( object2 );
+	
+	///ROAD
+
+const geometry = new THREE.PlaneGeometry(2000, 375);
+const material = new THREE.MeshBasicMaterial({ 
+  color: 0x00ff00, 
+});
+const rectangle = new THREE.Mesh(geometry, material);
+rectangle.rotation.x = -Math.PI / 2;
+scene.add(rectangle);
     // Add world geometry
 
+	///MARCH 24EXAMPLE MATERIAL AND OBJECT
+	
+	
+	
     // Grouping of trees
-    const geometry = new THREE.ConeGeometry(10, 60, 8, 1);
-    const material = new THREE.MeshPhongMaterial({ color: 0xffccff, flatShading: true });
-    const mesh = new THREE.InstancedMesh(geometry, material, 500);
-    const tree = new THREE.Object3D();
-    for (let i = 0; i < 75; i++) {
-        tree.position.x = Math.random() * 250 - 125;
-        tree.position.y = 0;
-        tree.position.z = Math.random() * 250 - 125;
-        tree.updateMatrix();
-        mesh.setMatrixAt(i, tree.matrix);
-    }
-    scene.add(mesh);
+   // const geometry = new THREE.ConeGeometry(10, 60, 8, 1);
+ //   const material = new THREE.MeshPhongMaterial({ color: 0xffccff, flatShading: true });
+  //  const mesh = new THREE.InstancedMesh(geometry, material, 500);
+ //   const tree = new THREE.Object3D();
+  //  for (let i = 0; i < 75; i++) {
+ //       tree.position.x = Math.random() * 250 - 125;
+   //     tree.position.y = 0;
+     //   tree.position.z = Math.random() * 250 - 125;
+       // tree.updateMatrix();
+       // mesh.setMatrixAt(i, tree.matrix);
+//    }
+  //  scene.add(mesh);
 
     // Ground
     const earth = new THREE.PlaneGeometry(2000, 2000);
