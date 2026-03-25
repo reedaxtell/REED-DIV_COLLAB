@@ -21,9 +21,6 @@ import {FontLoader} from "./src/FontLoader.js";
 
 /////
 	//////////sky
-	//
-	//
-import { SkyMesh } from 'three/addons/objects/SkyMesh.js';
 	//skyend
 
 
@@ -61,7 +58,7 @@ async function init() {
     canvas.appendChild(renderer.domElement);
 
     // Setup camera
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
     camera.position.set(0, 10, 0);
 
     // Setup orbit controls
@@ -76,7 +73,7 @@ async function init() {
     //controls.maxPolarAngle = Math.PI / 2;
 	
 	
-
+///
 	
 	
     
@@ -177,7 +174,7 @@ async function init() {
 	const loader = new FontLoader();
 	loader.load("./Public Sans_Bold.json", function( font ){
 		///////////// CREATE COLOR AND MATERIAL
-		const color = 0x006699;
+		const color = 0x04bc00;
 
 		const matDark = new THREE.LineBasicMaterial( {
 			color: color,
@@ -233,7 +230,7 @@ const objLoader = new OBJLoader().setPath( './' );
 
 const geometry = new THREE.PlaneGeometry(2000, 375);
 const material = new THREE.MeshBasicMaterial({ 
-  color: 0x00ff00, 
+  color: 0x333333, 
 });
 const rectangle = new THREE.Mesh(geometry, material);
 rectangle.rotation.x = -Math.PI / 2;
